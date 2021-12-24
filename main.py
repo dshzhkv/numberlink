@@ -1,6 +1,6 @@
 import argparse
 from graph_tools import Graph
-from NumberLink import *
+from NumberLinkSolver import *
 from Parser import Parser
 
 

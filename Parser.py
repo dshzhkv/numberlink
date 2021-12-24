@@ -2,7 +2,7 @@ import argparse
 import itertools
 
 from Structures import *
-from NumberLink import NumberLinkInstance
+from NumberLinkSolver import NumberLinkInstance
 
 
 class Parser:
