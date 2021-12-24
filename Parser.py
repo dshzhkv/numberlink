@@ -2,7 +2,7 @@ import argparse
 import itertools
 
 from Structures import *
-from NumberLinkSolver import NumberLinkInstance
+from NumberLinkInstance import *
 
 
 class Parser:
@@ -10,8 +10,7 @@ class Parser:
         self.field = None
 
     def parse_file(self):
-        # file_name = self.get_file_name().file_name
-        file_name = 'examples/4.txt'
+        file_name = self.get_file_name().file_name
         self.field = self.get_field(file_name)
         return NumberLinkInstance(self.field)
 
@@ -46,7 +45,7 @@ class Parser:
                                  "содержит i элементов поля через пробел (i = "
                                  "ширине поля). # - пустая клетка. можно "
                                  "использовать любой из примеров в "
-                                 "examples/(номер от 1 до 2).txt",
+                                 "examples/(номер от 1 до 6).txt",
                             type=str)
         return parser.parse_args()
 
