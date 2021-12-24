@@ -9,42 +9,32 @@ class NumberLinkInstance:
         self.graph = self.get_graph(field)
         self.pairs, self.numbers = self.get_pairs(field)
 
-    def is_valid(self, i, j, field):
-        return (0 <= i < len(field)
-                and 0 <= j < len(field[i]))
+    @staticmethod
+    def is_valid(node, field):
+        return 0 <= node[0] < field.height and 0 <= node[1] < field.width
 
     def get_graph(self, field):
         graph = Graph(directed=False, multiedged=False)
-        middle = len(field) // 2
-        for i, level in enumerate(field):
-            for j, cell, in enumerate(level):
-                start = i, j
-                ends = {
-                    (i + 1, j),
-                    (i, j + 1),
-                }
 
-                for valid_end in (end for end in ends if self.is_valid(end[0], end[1], field)):
-                    graph.add_edge(start, valid_end)
+        for i in range(field.height):
+            for j in range(field.width):
+                node1 = i, j
+                nodes = {(i + 1, j), (i, j + 1)}
+
+                for node2 in (node for node in nodes if
+                              self.is_valid(node, field)):
+                    graph.add_edge(node1, node2)
 
         return graph
-        # for i in range(len(field)):
-        #     for j in range(len(field[i])):
-        #         node1 = (i, j)
-        #         nodes = [(i + 1, j), (i, j + 1), (i + 1, j + 1) if
-        #                  i < len(field) // 2 else (i + 1, j - 1)]
-        #         for node2 in nodes:
-        #             graph.add_edge(node1, node2)
-        #     return graph
 
     @staticmethod
     def get_pairs(field):
         pairs = set()
         numbers = set()
         cur_pairs = dict()
-        for i in range(len(field)):
-            for j in range(len(field[i])):
-                element = field[i][j]
+        for i in range(field.height):
+            for j in range(field.width):
+                element = field.field[i][j]
                 if element != '#':
                     numbers.add((i, j))
                     if element not in cur_pairs.keys():

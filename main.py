@@ -9,7 +9,7 @@ def main():
     nl_instance = parser.parse_file()
     solver = NumberLinkSolver(nl_instance)
     solutions = solver.solve()
-    parser.show_solutions(solutions, parser.field)
+    parser.show_solutions(solutions)
 
 
 if __name__ == '__main__':

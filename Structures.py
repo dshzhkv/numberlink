@@ -21,5 +21,10 @@ class Node:
                self.arc == other.arc
 
 
+class Field:
+    def __init__(self, params, field):
+        self.width, self.height = params
+        self.field = field
+
 TERMINAL_ZERO = Node(None, None, 0)
 TERMINAL_ONE = Node(None, None, 1)

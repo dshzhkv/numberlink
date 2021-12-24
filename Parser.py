@@ -7,10 +7,11 @@ from NumberLink import NumberLinkInstance
 
 class Parser:
     def __init__(self):
-        self.field = []
+        self.field = None
 
     def parse_file(self):
-        file_name = self.get_file_name().file_name
+        # file_name = self.get_file_name().file_name
+        file_name = 'examples/4.txt'
         self.field = self.get_field(file_name)
         return NumberLinkInstance(self.field)
 
@@ -32,7 +33,7 @@ class Parser:
                     raise ValueError("Недостаточно символов в строке")
                 else:
                     field.append(line)
-            return field
+            return Field((width, height), field)
 
     @staticmethod
     def get_file_name():
@@ -60,11 +61,11 @@ class Parser:
 
     def print_solution(self, solution):
         result = []
-        for i in range(len(self.field)):
+        for i in range(self.field.height):
             line = []
             next_line = []
-            for j in range(len(self.field[i])):
-                line.append(self.field[i][j])
+            for j in range(self.field.width):
+                line.append(self.field.field[i][j])
                 if [(i, j), (i, j + 1)] in solution:
                     line.append('--')
                 else:
