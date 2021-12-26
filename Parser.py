@@ -2,7 +2,7 @@ import argparse
 import itertools
 
 from Structures import *
-from NumberLinkInstance import *
+from Instance import *
 
 
 class Parser:
@@ -10,9 +10,10 @@ class Parser:
         self.field = None
 
     def parse_file(self):
-        file_name = self.get_file_name().file_name
+        # file_name = self.get_file_name().file_name
+        file_name = 'examples/3.txt'
         self.field = self.get_field(file_name)
-        return NumberLinkInstance(self.field)
+        return Instance(self.field)
 
     @staticmethod
     def get_field(file_name):

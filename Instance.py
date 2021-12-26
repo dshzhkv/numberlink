@@ -1,7 +1,8 @@
-from graph_tools import Graph
+# from graph_tools import Graph
+from Structures import Graph
 
 
-class NumberLinkInstance:
+class Instance:
     def __init__(self, field):
         self.graph = self.get_graph(field)
         self.pairs, self.numbers = self.get_pairs(field)
@@ -11,7 +12,7 @@ class NumberLinkInstance:
         return 0 <= node[0] < field.height and 0 <= node[1] < field.width
 
     def get_graph(self, field):
-        graph = Graph(directed=False, multiedged=False)
+        graph = Graph()
 
         for i in range(field.height):
             for j in range(field.width):

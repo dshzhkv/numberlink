@@ -1,13 +1,13 @@
 import argparse
 from graph_tools import Graph
-from NumberLinkSolver import *
+from Solver import *
 from Parser import Parser
 
 
 def main():
     parser = Parser()
     nl_instance = parser.parse_file()
-    solver = NumberLinkSolver(nl_instance)
+    solver = Solver(nl_instance)
     solutions = solver.solve()
     parser.show_solutions(solutions)
 

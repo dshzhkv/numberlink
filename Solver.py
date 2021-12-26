@@ -3,13 +3,13 @@ import itertools
 from Structures import *
 
 
-class NumberLinkSolver:
+class Solver:
     def __init__(self, instance):
         self.instance = instance
 
     def solve(self):
-        edges = self.instance.graph.edges()
-        vertices = {'active': self.instance.graph.vertices(), 'not_active': []}
+        edges = self.instance.graph.edges
+        vertices = {'active': self.instance.graph.vertices, 'not_active': []}
 
         root = Node(edges[0], {v: v for v in vertices['active']}, 1)
         nodes = [root]
@@ -22,21 +22,22 @@ class NumberLinkSolver:
             new_nodes = []
 
             for node in nodes:
-                children = []
                 if self.is_zero_incompatible(node, self.instance, vertices):
-                    children.append(TERMINAL_ZERO)
+                    node.add_zero_child(TERMINAL_ZERO)
                 else:
                     new_mate = self.update_domain(node.mate, vertices)
-                    children.append(self.get_node(next_edge, new_mate, 0))
+                    node.add_zero_child(self.get_node(next_edge, new_mate, 0))
                 if self.is_one_incompatible(node, self.instance, vertices):
-                    children.append(TERMINAL_ZERO)
+                    node.add_one_child(TERMINAL_ZERO)
                 else:
                     new_mate = self.update_domain(self.update_mate(node),
                                              vertices)
-                    children.append(self.get_node(next_edge, new_mate, 1))
+                    node.add_one_child(self.get_node(next_edge, new_mate, 1))
 
-                new_nodes.extend(n for n in children if not self.is_terminal(n))
-                node.add_children(*children)
+                if not self.is_terminal(node.zero_child):
+                    new_nodes.append(node.zero_child)
+                if not self.is_terminal(node.one_child):
+                    new_nodes.append(node.one_child)
             nodes = new_nodes
 
         return self.collect_solutions(root)
