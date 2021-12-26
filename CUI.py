@@ -93,17 +93,29 @@ class InputHandler:
     @staticmethod
     def get_data():
         parser = argparse.ArgumentParser()
-        parser.add_argument('-s', '--hexagonal', help='6-угольное поле',
+        parser.add_argument('-s', '--hexagonal', help='6-угольное поле '
+                                                      '(по умолчанию '
+                                                      'прямоугольное)',
                             action='store_true', default=False)
         parser.add_argument("file_name",
-                            help="имя или путь к файлу, в котором первая "
-                                 "строка содержит два числа через пробел: "
-                                 "ширину и высоту поля, каждая следующая j-я "
-                                 "строка (j не превышает высоты поля) "
-                                 "содержит i элементов поля через пробел (i = "
-                                 "ширине поля). # - пустая клетка. можно "
-                                 "использовать любой из примеров в "
-                                 "examples/(номер от 1 до 6).txt",
+                            help="имя или путь к файлу с головоломкой. ДЛЯ "
+                                 "6-УГОЛЬНОГО ПОЛЯ в первой строке одно целое "
+                                 "положительное число i - высота поля. Далее "
+                                 "в следующих i строках содержатся строки "
+                                 "поля - j элементов поля через пробел, где "
+                                 "j - сначала увеличивающаяся, затем "
+                                 "уменьшающаяся ширина строки. Например, "
+                                 "в 6-угольном поле высоты 3 длины строк "
+                                 "будут равны 2, 3, 2. # - пустая клетка. "
+                                 "Можно использовать любой из примеров в "
+                                 "examples/(номер от 1 до 6)_h.txt. "
+                                 "ДЛЯ ПРЯМОУГОЛЬНОГО ПОЛЯ: в первой строке "
+                                 "два целых положительных числа j, i - высота "
+                                 "и ширина поля. Далее в следующих i строках "
+                                 "содержатся строки поля - j элементов поля "
+                                 "через пробел, где j - ширина поля. # - "
+                                 "пустая клетка. Можно использовать любой из "
+                                 "примеров в examples/(номер от 1 до 6).txt",
                             type=str)
         args = parser.parse_args()
         return args.hexagonal, args.file_name
@@ -119,77 +131,77 @@ class OutputHandler:
         for i, solution in enumerate(solutions):
             any_solutions = True
             print('Решение {}'.format(i + 1))
-            if self.is_hexagonal:
-                self.print_solution_hex(solution)
-            else:
-                self.print_solution(solution)
+            self.print_solution(solution)
         if not any_solutions:
             print('Нет решений')
 
     def print_solution(self, solution):
         result = []
-        for i in range(self.field.height):
-            line = []
-            next_line = []
-            for j in range(self.field.width):
-                line.append(self.field.field[i][j])
-                if [(i, j), (i, j + 1)] in solution:
-                    line.append('--')
-                else:
-                    line.append(' ' * 2)
-
-                if [(i, j), (i + 1, j)] in solution:
-                    next_line.append('|' + ' ' * 2)
-                else:
-                    next_line.append(' ' * 3)
-            result.append(line)
-            result.append(next_line)
-        for i in range(len(result)):
-            print(''.join(result[i]))
-
-    def print_solution_hex(self, solution):
-        result = []
 
         passed_middle = False
-        for i in range(self.field.height):
-            width = len(self.field.field[i])
 
+        for i in range(self.field.height):
+
+            line = []
+            next_line = []
+
+            width = len(self.field.field[i])
             if not passed_middle:
                 passed_middle = (width == self.field.width)
 
-            line = []
-            next_line = []
+            if self.is_hexagonal:
+                self.align_center(line, next_line, width)
 
-            line.append(' ' * 2 * (self.field.width - width))
-            next_line.append(' ' * 2 * (self.field.width - width))
             for j in range(width):
-
                 line.append(self.field.field[i][j])
-                if [(i, j), (i, j + 1)] in solution:
-                    line.append('--')
+                line.append(self.get_horizontal_connection(i, j, solution))
+                if self.is_hexagonal:
+                    next_line.append(
+                        self.get_diagonal_connection(i, j, solution,
+                                                     passed_middle))
                 else:
-                    line.append(' ' * 2)
-
-                if not passed_middle:
-                    if [(i, j), (i + 1, j)] in solution:
-                        next_line.append('/' + ' ' * 2)
-                    elif [(i, j), (i + 1, j + 1)] in solution:
-                        next_line.append('\\' + ' ' * 2)
-                    else:
-                        next_line.append(' ' * 3)
-
-                else:
-                    if [(i, j), (i + 1, j)] in solution:
-                        next_line.append('\\' + ' ' * 2)
-                    elif [(i, j), (i + 1, j - 1)] in solution:
-                        next_line.append('/' + ' ' * 2)
-                    else:
-                        next_line.append(' ' * 3)
+                    next_line.append(
+                        self.get_vertical_connection(i, j, solution))
 
             result.append(line)
             result.append(next_line)
+
         for i in range(len(result)):
             print(''.join(result[i]))
+
+    @staticmethod
+    def get_horizontal_connection(i, j, solution):
+        if [(i, j), (i, j + 1)] in solution:
+            return '---'
+        return ' ' * 3
+
+    @staticmethod
+    def get_vertical_connection(i, j, solution):
+        if [(i, j), (i + 1, j)] in solution:
+            return '|' + ' ' * 3
+        return ' ' * 4
+
+    @staticmethod
+    def get_diagonal_connection(i, j, solution, passed_middle):
+
+        if not passed_middle:
+            if [(i, j), (i + 1, j)] in solution:
+                return '/' + ' ' * 3
+            elif [(i, j), (i + 1, j + 1)] in solution:
+                return ' \\' + ' '
+
+        else:
+            if [(i, j), (i + 1, j)] in solution:
+                return ' \\' + ' '
+            elif [(i, j), (i + 1, j - 1)] in solution:
+                return '/' + ' ' * 3
+
+        return ' ' * 4
+
+    def align_center(self, line, next_line, width):
+        margin = ' ' * 2 * (self.field.width - width)
+        line.append(margin)
+        next_line.append(margin)
 
 
 class CUI:
@@ -198,8 +210,7 @@ class CUI:
         self.output_handler = None
 
     def get_instance(self):
-        # is_hexagonal, file_name = self.input_handler.get_data()
-        is_hexagonal, file_name = True, 'examples/1_h.txt'
+        is_hexagonal, file_name = self.input_handler.get_data()
         field = self.input_handler.get_field(file_name, is_hexagonal)
         self.output_handler = OutputHandler(field, is_hexagonal)
         return Instance(field, is_hexagonal)
