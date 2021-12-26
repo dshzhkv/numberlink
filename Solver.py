@@ -22,46 +22,61 @@ class Solver:
             new_nodes = []
 
             for node in nodes:
-                if self.is_zero_incompatible(node, self.instance, vertices):
-                    node.add_zero_child(TERMINAL_ZERO)
-                else:
-                    new_mate = self.update_domain(node.mate, vertices)
-                    node.add_zero_child(self.get_node(next_edge, new_mate, 0))
-                if self.is_one_incompatible(node, self.instance, vertices):
-                    node.add_one_child(TERMINAL_ZERO)
-                else:
-                    new_mate = self.update_domain(self.update_mate(node),
-                                             vertices)
-                    node.add_one_child(self.get_node(next_edge, new_mate, 1))
+                node.add_zero_child(self.get_zero_child(node, vertices,
+                                                        next_edge))
+                node.add_one_child(self.get_one_child(node, vertices,
+                                                      next_edge))
+                self.get_new_nodes(node.zero_child, node.one_child, new_nodes)
 
-                if not self.is_terminal(node.zero_child):
-                    new_nodes.append(node.zero_child)
-                if not self.is_terminal(node.one_child):
-                    new_nodes.append(node.one_child)
             nodes = new_nodes
 
         return self.collect_solutions(root)
 
-    def is_terminal(self, node):
-        res = node == TERMINAL_ONE or node == TERMINAL_ZERO
+    def get_zero_child(self, node, vertices, next_edge):
+        if self.is_zero_incompatible(node, self.instance, vertices):
+            return TERMINAL_ZERO
+        else:
+            new_mate = self.update_domain(node.mate, vertices)
+            return self.get_node(next_edge, new_mate, 0)
 
-        return res
+    def get_one_child(self, node, vertices, next_edge):
+        if self.is_one_incompatible(node, self.instance, vertices):
+            return TERMINAL_ZERO
+        else:
+            new_mate = self.update_domain(self.update_mate(node),
+                                          vertices)
+            return self.get_node(next_edge, new_mate, 1)
 
-    def update_vertices(self, edge, vertices, edges):
+    def get_new_nodes(self, zero_child, one_child, new_nodes):
+        if not self.is_terminal(zero_child):
+            new_nodes.append(zero_child)
+        if not self.is_terminal(one_child):
+            new_nodes.append(one_child)
+
+    @staticmethod
+    def is_terminal(node):
+        return node == TERMINAL_ONE or node == TERMINAL_ZERO
+
+    @staticmethod
+    def update_vertices(edge, vertices, edges):
         incident_vertices = set(itertools.chain(*edges))
-        edge_incident_vertices = [v for v in edge if v not in incident_vertices]
+        edge_incident_vertices = [v for v in edge if v not in
+                                  incident_vertices]
         for v in edge_incident_vertices:
             vertices['active'].remove(v)
             vertices['not_active'].append(v)
 
-    def is_zero_incompatible(self, node, instance, vertices):
+    @staticmethod
+    def is_zero_incompatible(node, instance, vertices):
         filtered = [v for v in node.edge if v not in vertices['active']]
         for v in filtered:
-            if node.mate[v] == v or v not in instance.numbers and node.mate[v] not in [0, v]:
+            if node.mate[v] == v or v not in instance.numbers and \
+                    node.mate[v] not in [0, v]:
                 return True
         return False
 
-    def update_domain(self, mate, vertices):
+    @staticmethod
+    def update_domain(mate, vertices):
         return {v: mate[v] for v in vertices['active']}
 
     def update_mate(self, node):
@@ -78,7 +93,8 @@ class Solver:
 
         return mate
 
-    def get_node(self, next_edge, new_mate, arc):
+    @staticmethod
+    def get_node(next_edge, new_mate, arc):
         return Node(next_edge, new_mate, arc) if next_edge else TERMINAL_ONE
 
     def is_one_incompatible(self, node, instance, vertices):
@@ -92,8 +108,10 @@ class Solver:
         return (pairs <= union and pairs not in instance.pairs
                 or any(condition(v) for v in node.edge))
 
-    def get_opposite(self, vertice, edge):
-        return edge[0] if vertice == edge[1] else edge[1] if vertice == edge[0] else None
+    @staticmethod
+    def get_opposite(vertice, edge):
+        return edge[0] if vertice == edge[1] else edge[1] \
+            if vertice == edge[0] else None
 
     def collect_solutions(self, root, path=None):
         if path is None:
@@ -101,4 +119,6 @@ class Solver:
         if root is TERMINAL_ONE:
             yield path
         elif root is not TERMINAL_ZERO:
-            yield from itertools.chain(self.collect_solutions(root.zero_child, path), self.collect_solutions(root.one_child, path + [root.edge]))
+            yield from itertools.chain(
+                self.collect_solutions(root.zero_child, path),
+                self.collect_solutions(root.one_child, path + [root.edge]))
