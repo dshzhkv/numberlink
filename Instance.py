@@ -3,7 +3,7 @@ from Structures import Graph
 
 
 class Instance:
-    def __init__(self, field):
+    def __init__(self, field, is_hexagonal):
         self.graph = self.get_graph(field)
         self.pairs, self.numbers = self.get_pairs(field)
 
