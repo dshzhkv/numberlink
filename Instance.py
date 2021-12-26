@@ -71,18 +71,35 @@ class Instance:
         for node2 in nodes:
             graph.add_edge(node1, node2)
 
-    @staticmethod
-    def get_pairs(field):
+    def get_pairs(self, field):
         pairs = set()
         numbers = set()
         cur_pairs = dict()
+        paired = set()
         for i in range(field.height):
             for j in range(len(field.field[i])):
                 element = field.field[i][j]
                 if element != '#':
+                    self.check_for_excess_numbers(element, paired)
                     numbers.add((i, j))
                     if element not in cur_pairs.keys():
                         cur_pairs[element] = (i, j)
                     else:
                         pairs.add(frozenset((cur_pairs[element], (i, j))))
+                        paired.add(element)
+                        del cur_pairs[element]
+
+        self.check_for_no_pair(cur_pairs)
+
         return pairs, numbers
+
+    @staticmethod
+    def check_for_no_pair(cur_pairs):
+        if len(cur_pairs) > 0:
+            raise ValueError('У некоторых чисел нет пары :(')
+
+    @staticmethod
+    def check_for_excess_numbers(element, paired):
+        if element in paired:
+            raise ValueError('На поле не может быть больше двух одинаковых '
+                             'чисел')
