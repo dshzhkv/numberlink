@@ -47,34 +47,8 @@ class TestFieldParser(unittest.TestCase):
     def test_width_error_small_rectangle(self):
         context = self.setup_test('2 2', '1 2', '1')
 
-        self.assertTrue("Количество символов в строке меьше заявленной "
+        self.assertTrue("Количество символов в строке меньше заявленной "
                         "ширины поля" in str(context.exception))
-
-    def test_height_error_long_hexagonal(self):
-        context = self.setup_test('3', '1 2', '# # #', '1 2', '#',
-                                  is_hexagonal=True)
-
-        self.assertTrue("Количество строк больше заявленной высоты поля" in
-                        str(context.exception))
-
-    def test_height_error_small_hexagonal(self):
-        context = self.setup_test('3', '1 2', '# # #',
-                                  is_hexagonal=True)
-
-        self.assertTrue("Количество строк меньше заявленной высоты поля" in
-                        str(context.exception))
-
-    def test_height_error_long_rectangle(self):
-        context = self.setup_test('2 2', '1 2', '1 2', '#')
-
-        self.assertTrue("Количество строк больше заявленной высоты поля" in
-                        str(context.exception))
-
-    def test_height_error_small_rectangle(self):
-        context = self.setup_test('2 2', '1 2')
-
-        self.assertTrue("Количество строк меньше заявленной высоты поля" in
-                        str(context.exception))
 
     def setup_file(self, *lines):
         with open('test_file.txt', 'w') as test_file:
@@ -152,6 +126,7 @@ class TestSolver(unittest.TestCase):
         solver = Solver(instance)
         solutions = list(solver.solve())
         assert len(solutions) == 0
+
 
 if __name__ == '__main__':
     unittest.main()

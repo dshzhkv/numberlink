@@ -28,8 +28,6 @@ class InputHandler:
             self.get_field_half(math.ceil(height / 2) - 1, file, max_width - 1,
                                 -1, field)
 
-            self.check_height(field, height)
-
             return Field((max_width, height), field)
 
     def get_field_half(self, num_of_lines, file, width, delta, field):
@@ -61,7 +59,6 @@ class InputHandler:
                 self.check_line_width(line, width)
                 field.append(line)
 
-            self.check_height(field, height)
             return Field((width, height), field)
 
     @staticmethod
@@ -83,13 +80,6 @@ class InputHandler:
         if len(line) < width:
             raise ValueError("Количество символов в строке меньше заявленной "
                              "ширины поля")
-
-    @staticmethod
-    def check_height(field, height):
-        if len(field) < height:
-            raise ValueError("Количество строк меньше заявленной высоты поля")
-        if len(field) > height:
-            raise ValueError("Количество строк больше заявленной высоты поля")
 
     @staticmethod
     def get_data():
