@@ -29,6 +29,7 @@ class InputHandler:
                                 -1, field)
 
             self.check_height(field, height)
+
             return Field((max_width, height), field)
 
     def get_field_half(self, num_of_lines, file, width, delta, field):

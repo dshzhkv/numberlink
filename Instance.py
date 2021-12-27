@@ -5,8 +5,8 @@ import math
 class Instance:
     def __init__(self, field, is_hexagonal):
         self.is_hexagonal = is_hexagonal
-        self.graph = self.get_graph(field)
         self.pairs, self.numbers = self.get_pairs(field)
+        self.graph = self.get_graph(field)
 
     def get_graph(self, field):
         graph = Graph()
