@@ -1,7 +1,7 @@
 import argparse
 
-from Instance import Instance
-from Structures import Field
+from Application.Instance import Instance
+from Application.Structures import Field
 import math
 
 

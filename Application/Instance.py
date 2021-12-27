@@ -1,4 +1,4 @@
-from Structures import Graph
+from Application.Structures import Graph
 import math
 
 

@@ -1,6 +1,6 @@
 import itertools
 
-from Structures import *
+from Application.Structures import *
 
 
 class Solver:

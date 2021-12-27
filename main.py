@@ -1,9 +1,5 @@
-import argparse
-from graph_tools import Graph
-
-from CUI import CUI
-from Solver import *
-from Parser import Parser
+from Application.CUI import CUI
+from Application.Solver import *
 
 
 def main():

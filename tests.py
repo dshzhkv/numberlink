@@ -1,8 +1,8 @@
 import unittest
-from CUI import InputHandler
-from Structures import *
-from Instance import Instance
-from Solver import Solver
+from Application.CUI import InputHandler
+from Application.Structures import *
+from Application.Instance import Instance
+from Application.Solver import Solver
 
 
 class TestFieldParser(unittest.TestCase):
