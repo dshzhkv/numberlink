@@ -141,7 +141,7 @@ class OutputHandler:
                 passed_middle = (width == self.field.width)
 
             if self.is_hexagonal:
-                self.align_center(line, next_line, width)
+                self.align_center(line, next_line, width, passed_middle)
 
             for j in range(width):
                 line.append(self.field.field[i][j])
@@ -174,25 +174,31 @@ class OutputHandler:
 
     @staticmethod
     def get_diagonal_connection(i, j, solution, passed_middle):
-
         if not passed_middle:
             if [(i, j), (i + 1, j)] in solution:
                 return '/' + ' ' * 3
             elif [(i, j), (i + 1, j + 1)] in solution:
-                return ' \\' + ' '
+                return ' ' * 2 + '\\' + ' '
 
         else:
             if [(i, j), (i + 1, j)] in solution:
-                return ' \\' + ' '
+                if j == 0:
+                    return '\\' + ' '
+                return ' ' * 2 + '\\' + ' '
             elif [(i, j), (i + 1, j - 1)] in solution:
                 return '/' + ' ' * 3
 
+        if passed_middle and j == 0:
+            return ' ' * 2
         return ' ' * 4
 
-    def align_center(self, line, next_line, width):
-        margin = ' ' * 2 * (self.field.width - width)
-        line.append(margin)
-        next_line.append(margin)
+    def align_center(self, line, next_line, width, passed_middle):
+        margin = 2 * (self.field.width - width)
+        line.append(' ' * margin)
+        if not passed_middle:
+            next_line.append(' ' * (margin - 1))
+        else:
+            next_line.append(' ' * (margin + 1))
 
 
 class CUI:

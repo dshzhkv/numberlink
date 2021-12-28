@@ -32,11 +32,11 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Test application
         run: |
-          pytest test_application.py
+          pytest ../Tests/test_application.py
       - name: Test UI
         run: |
-          pytest test_ui.py
+          pytest ../Tests/test_ui.py
       - name: Check coverage
         run: |
-          pytest test_application.py --cov=Application
-          pytest test_ui.py --cov=UI
+          pytest ../Tests/test_application.py --cov=../Application
+          pytest ../Tests/test_ui.py --cov=../UI
