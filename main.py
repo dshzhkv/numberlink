@@ -1,4 +1,4 @@
-from Application.CUI import CUI
+from UI.CUI import CUI
 from Application.Solver import *
 
 
