@@ -1,5 +1,5 @@
 import unittest
-from UI.CUI import InputHandler, OutputHandler  
+from UI.CUI import InputHandler, OutputHandler
 
 
 class TestFieldParser(unittest.TestCase):
@@ -63,6 +63,11 @@ class TestFieldParser(unittest.TestCase):
     def write_to_file(test_file, *lines):
         for line in lines:
             test_file.write(line + '\n')
+
+
+class TestOutput(unittest.TestCase):
+    def test(self):
+        output_handler = OutputHandler()
 
 
 if __name__ == '__main__':

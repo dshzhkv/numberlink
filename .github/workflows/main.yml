@@ -30,13 +30,20 @@ jobs:
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      - name: Test application
+#      - name: Test application
+#        run: |
+#          pytest ../Tests/test_application.py
+#      - name: Test UI
+#        run: |
+#          pytest ../Tests/test_ui.py
+#      - name: Check coverage
+#        run: |
+#          pytest ../Tests/test_application.py --cov=../Application
+#          pytest ../Tests/test_ui.py --cov=../UI
+      - name: Test with pytest
         run: |
-          pytest ../Tests/test_application.py
-      - name: Test UI
-        run: |
-          pytest ../Tests/test_ui.py
+          pytest
       - name: Check coverage
+        # Здесь --cov=minesweeper выбирает директорию, для которой считать покрытие тестами
         run: |
-          pytest ../Tests/test_application.py --cov=../Application
-          pytest ../Tests/test_ui.py --cov=../UI
+          pytest --cov=Application
