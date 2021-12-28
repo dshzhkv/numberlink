@@ -66,8 +66,11 @@ class TestFieldParser(unittest.TestCase):
 
 
 class TestOutput(unittest.TestCase):
-    def test(self):
-        output_handler = OutputHandler()
+    def test_output_hexagonal_after_middle_starts_with_right_diagonal(self):
+        input_handler = InputHandler()
+        field = input_handler.get_field('../examples/3_h.txt', True)
+        output_handler = OutputHandler(field, True)
+
 
 
 if __name__ == '__main__':
