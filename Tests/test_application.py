@@ -1,7 +1,7 @@
 import os
 import unittest
-from UI.CUI import InputHandler
 from Application.Structures import *
+from UI.CUI import InputHandler
 from Application.Instance import Instance
 from Application.Solver import Solver
 import examples
