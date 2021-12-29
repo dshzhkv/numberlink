@@ -47,3 +47,4 @@ jobs:
         # Здесь --cov=minesweeper выбирает директорию, для которой считать покрытие тестами
         run: |
           pytest --cov=Application
+          pytest --cov=UI
