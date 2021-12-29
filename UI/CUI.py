@@ -117,16 +117,7 @@ class OutputHandler:
         self.field = field
         self.is_hexagonal = is_hexagonal
 
-    def show_solutions(self, solutions):
-        any_solutions = False
-        for i, solution in enumerate(solutions):
-            any_solutions = True
-            print('Решение {}'.format(i + 1))
-            self.print_solution(solution)
-        if not any_solutions:
-            print('Нет решений')
-
-    def print_solution(self, solution):
+    def get_solution(self, solution):
         result = []
 
         passed_middle = False
@@ -146,6 +137,8 @@ class OutputHandler:
             for j in range(width):
                 line.append(self.field.field[i][j])
                 line.append(self.get_horizontal_connection(i, j, solution))
+
+
                 if self.is_hexagonal:
                     next_line.append(
                         self.get_diagonal_connection(i, j, solution,
@@ -155,10 +148,24 @@ class OutputHandler:
                         self.get_vertical_connection(i, j, solution))
 
             result.append(line)
-            result.append(next_line)
+            if i < self.field.height - 1:
+                result.append(next_line)
 
-        for i in range(len(result)):
-            print(''.join(result[i]))
+        return result
+
+    def show_solutions(self, solutions):
+        any_solutions = False
+        for i, solution in enumerate(solutions):
+            any_solutions = True
+            print('Решение {}'.format(i + 1))
+            self.print_solution(self.get_solution(solution))
+        if not any_solutions:
+            print('Нет решений')
+
+    @staticmethod
+    def print_solution(solution):
+        for i in range(len(solution)):
+            print(''.join(solution[i]))
 
     @staticmethod
     def get_horizontal_connection(i, j, solution):

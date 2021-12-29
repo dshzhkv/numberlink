@@ -1,4 +1,7 @@
 import unittest
+
+from Application.Instance import Instance
+from Application.Solver import Solver
 from UI.CUI import InputHandler, OutputHandler
 
 
@@ -66,11 +69,54 @@ class TestFieldParser(unittest.TestCase):
 
 
 class TestOutput(unittest.TestCase):
-    def test_output_hexagonal_after_middle_starts_with_right_diagonal(self):
-        input_handler = InputHandler()
-        field = input_handler.get_field('../examples/3_h.txt', True)
+    def test_output_hexagonal(self):
+        field = InputHandler().get_field('../examples/3_h.txt', True)
         output_handler = OutputHandler(field, True)
+        solution = output_handler.get_solution(list(Solver(
+            Instance(field, True)).solve())[0])
 
+        def space(length):
+            return ' ' * length
+
+        right = '  \\ '
+        left = '/   '
+        horizontal = '---'
+        expected_output = [
+            [space(6), '1', space(3), '2', space(3)],
+            [space(5), right, right],
+            [space(4), '4', space(3), '#', space(3), '#', space(3)],
+            [space(3), right, right, right],
+            [space(2), '5', space(3), '#', space(3), '#', space(3), '#', space(3)],
+            [space(1), right, right, right, right],
+            [space(0), '3', space(3), '5', space(3), '4', space(3), '#', space(3), '#', space(3)],
+            [space(1), '\\ ', space(4), space(4), left, left],
+            [space(2), '#', horizontal, '3', space(3), '#', space(3), '#', space(3)],
+            [space(3), space(2), space(4), left, left],
+            [space(4), '#', horizontal, '#', space(3), '#', space(3)],
+            [space(5), '\\ ', space(4), left],
+            [space(6), '1', space(3), '2', space(3)]]
+
+        self.assertEqual(expected_output, solution)
+
+    def test_output_rectangle(self):
+        field = InputHandler().get_field('../examples/6.txt', False)
+        output_handler = OutputHandler(field, False)
+        solution = output_handler.get_solution(list(Solver(
+            Instance(field, False)).solve())[0])
+
+        def space(length):
+            return ' ' * length
+
+        vertical = '|   '
+        horizontal = '---'
+
+        expected_output = [['2', space(3), '1', horizontal, '#', space(3)],
+                           [vertical, space(4), vertical],
+                           ['#', horizontal, '2', space(3), '1', space(3)],
+                           [space(4), space(4), space(4)],
+                           ['3', horizontal, '#', horizontal, '3', space(3)]]
+
+        self.assertEqual(expected_output, solution)
 
 
 if __name__ == '__main__':
