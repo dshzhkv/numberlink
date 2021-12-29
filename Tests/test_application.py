@@ -1,10 +1,14 @@
 import os
+import sys
 import unittest
-from Application.Structures import *
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             os.path.pardir))
+
 from UI.CUI import InputHandler
+from Application.Structures import *
 from Application.Instance import Instance
 from Application.Solver import Solver
-import examples
 
 
 class TestInstanceGeneration(unittest.TestCase):

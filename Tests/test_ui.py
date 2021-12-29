@@ -1,4 +1,9 @@
+import os
+import sys
 import unittest
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             os.path.pardir))
 
 from Application.Instance import Instance
 from Application.Solver import Solver
