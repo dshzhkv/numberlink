@@ -75,7 +75,7 @@ class TestFieldParser(unittest.TestCase):
 
 class TestOutput(unittest.TestCase):
     def test_output_hexagonal(self):
-        field = InputHandler().get_field('../examples/3_h.txt', True)
+        field = InputHandler().get_field('examples/3_h.txt', True)
         output_handler = OutputHandler(field, True)
         solution = output_handler.get_solution(list(Solver(
             Instance(field, True)).solve())[0])
@@ -104,7 +104,7 @@ class TestOutput(unittest.TestCase):
         self.assertEqual(expected_output, solution)
 
     def test_output_rectangle(self):
-        field = InputHandler().get_field('../examples/6.txt', False)
+        field = InputHandler().get_field('examples/6.txt', False)
         output_handler = OutputHandler(field, False)
         solution = output_handler.get_solution(list(Solver(
             Instance(field, False)).solve())[0])

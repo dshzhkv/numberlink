@@ -34,7 +34,7 @@ class TestInstanceGeneration(unittest.TestCase):
 class TestSolver(unittest.TestCase):
     def test_solve_hexagonal(self):
         input_handler = InputHandler()
-        field = input_handler.get_field('../examples/1_h.txt', True)
+        field = input_handler.get_field('examples/1_h.txt', True)
         instance = Instance(field, True)
         solver = Solver(instance)
         solutions = list(solver.solve())
@@ -42,7 +42,7 @@ class TestSolver(unittest.TestCase):
 
     def test_solve_rectangle(self):
         input_handler = InputHandler()
-        field = input_handler.get_field('../examples/1.txt', False)
+        field = input_handler.get_field('examples/1.txt', False)
         instance = Instance(field, False)
         solver = Solver(instance)
         solutions = list(solver.solve())
@@ -50,7 +50,7 @@ class TestSolver(unittest.TestCase):
 
     def test_no_solutions_hexagonal(self):
         input_handler = InputHandler()
-        field = input_handler.get_field('../examples/4_h.txt', True)
+        field = input_handler.get_field('examples/4_h.txt', True)
         instance = Instance(field, True)
         solver = Solver(instance)
         solutions = list(solver.solve())
@@ -58,7 +58,7 @@ class TestSolver(unittest.TestCase):
 
     def test_no_solutions_rectangle(self):
         input_handler = InputHandler()
-        field = input_handler.get_field('../examples/7.txt', False)
+        field = input_handler.get_field('examples/7.txt', False)
         instance = Instance(field, False)
         solver = Solver(instance)
         solutions = list(solver.solve())
